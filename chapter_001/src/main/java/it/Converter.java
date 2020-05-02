@@ -1,5 +1,6 @@
 package it;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -8,7 +9,7 @@ public class Converter {
     Iterator<Integer> convert(Iterator<Iterator<Integer>> it) {
 
         return new Iterator<Integer>() {
-            private Iterator<Integer> current = it.next();
+            private Iterator<Integer> current = Collections.emptyIterator();
 
             @Override
             public boolean hasNext() {

@@ -13,7 +13,7 @@ public class SimpleLinked<E> implements Iterable<E> {
     public void add(E value) {
         position++;
         modCount++;
-        Node<E> node = new Node<E>(value, null);
+        Node<E> node = new Node<>(value, null);
         if (head == null) {
             head = node;
             return;
@@ -35,9 +35,30 @@ public class SimpleLinked<E> implements Iterable<E> {
         return tail.value;
     }
 
+    public E deleteLast() {
+        E rsl;
+        if (position == 0) {
+            throw new NoSuchElementException();
+        } else if (position == 1) {
+            rsl = head.value;
+            head = null;
+        } else {
+            Node<E> current = head.next;
+            Node<E> previous = head;
+            while (current.next != null) {
+                previous = current;
+                current = current.next;
+            }
+            rsl = current.value;
+            previous.next = null;
+        }
+        position--;
+        return rsl;
+    }
+
     @Override
     public Iterator<E> iterator() {
-        return new Iterator<E>() {
+        return new Iterator<>() {
             Node<E> node = head;
             private int expectedModCount = modCount;
 

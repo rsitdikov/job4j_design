@@ -56,6 +56,18 @@ public class SimpleLinked<E> implements Iterable<E> {
         return rsl;
     }
 
+    public void revert() {
+            Node<E> current = null;
+            Node<E> tail;
+            while (head != null) {
+                tail = head.next;
+                head.next = current;
+                current = head;
+                head = tail;
+            }
+            head = current;
+    }
+
     @Override
     public Iterator<E> iterator() {
         return new Iterator<>() {

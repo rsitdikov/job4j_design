@@ -50,7 +50,7 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
         boolean rsl = key != null;
         if (rsl) {
             int index = hash(key);
-            if (table[index] != null) {
+            if (table[index] != null && table[index].getKey().equals(key)) {
                 table[index] = null;
                 size--;
                 modCount++;
@@ -62,7 +62,14 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
     }
 
     public V get(K key) {
-       return key == null ? null : (V) table[hash(key)].getValue();
+        V rsl = null;
+        if (key != null) {
+            int index = hash(key);
+            if (table[index].getKey().equals(key)) {
+                rsl = (V) table[index].getValue();
+            }
+        }
+        return rsl;
     }
 
     private int hash(K key) {

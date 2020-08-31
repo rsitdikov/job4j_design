@@ -7,8 +7,17 @@ import java.util.List;
 public class Search {
 
     public static void main(String[] args) throws IOException {
-        Path start = Paths.get(".");
-        search(start, "js").forEach(System.out::println);
+        if (args.length != 2) {
+            throw new IllegalArgumentException("Wrong number of arguments."
+                    + System.lineSeparator()
+                    + "Usage java -jar Search.jar ROOT_FOLDER FILE_EXTENSION");
+        }
+        Path start = Paths.get(args[0]);
+        if (!start.toFile().isDirectory()) {
+            throw new IllegalArgumentException(String.format("Directory '%s' is missing.", start));
+        }
+        String ext = args[1];
+        search(start, ext).forEach(System.out::println);
     }
 
     public static List<Path> search(Path root, String ext) throws IOException {

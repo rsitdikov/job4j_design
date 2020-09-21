@@ -5,6 +5,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Chat {
+    private static final int CONTINUE = 0;
+    private static final int PAUSE = 1;
+    private static final int EXIT = 2;
+    private final Map<String, Integer> dispath = Map.of(
+            "продолжить", CONTINUE,
+            "стоп", PAUSE,
+            "закончить", EXIT
+    );
     private final String output;
     private List<String> answers = new ArrayList<>();
 
@@ -31,7 +39,7 @@ public class Chat {
         save(msg);
     }
 
-    private void save (String msg) {
+    private void save(String msg) {
         try (PrintWriter out = new PrintWriter(new BufferedOutputStream(
                 new FileOutputStream(output, true)))) {
             out.println(String.format("%s: %s", new Date().toString(), msg));
@@ -41,24 +49,14 @@ public class Chat {
     }
 
     public void execute() {
-        int status = 0;
+        int status = CONTINUE;
         do {
             String msg = fromUser().toLowerCase();
-            switch (msg) {
-                case "закончить":
-                    status = 2;
-                    break;
-                case "стоп":
-                    status = 1;
-                    break;
-                case "продолжить":
-                    status = 0;
-                    break;
-            }
-            if (status == 0) {
+            status = dispath.getOrDefault(msg, status);
+            if (status == CONTINUE) {
                 fromBot();
             }
-        } while (status != 2);
+        } while (status != EXIT);
     }
 
     public static void main(String[] args) {

@@ -15,6 +15,7 @@ public class Chat {
     );
     private final String output;
     private List<String> answers = new ArrayList<>();
+    private StringJoiner log = new StringJoiner(System.lineSeparator());
 
     public Chat(String input, String output) {
         this.output = output;
@@ -28,7 +29,7 @@ public class Chat {
     private String fromUser() {
         System.out.print("You: ");
         String msg = new Scanner(System.in).nextLine();
-        save("You: " + msg);
+        log.add(String.format("%s: %s: %s", new Date().toString(), "You", msg));
         return msg;
     }
 
@@ -36,13 +37,13 @@ public class Chat {
         int index = new Random().nextInt(answers.size() - 1);
         String msg = "Bot: " + answers.get(index);
         System.out.println(msg);
-        save(msg);
+        log.add(String.format("%s: %s", new Date().toString(), msg));
     }
 
-    private void save(String msg) {
+    private void save() {
         try (PrintWriter out = new PrintWriter(new BufferedOutputStream(
-                new FileOutputStream(output, true)))) {
-            out.println(String.format("%s: %s", new Date().toString(), msg));
+                new FileOutputStream(output)))) {
+            out.print(log.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -57,6 +58,7 @@ public class Chat {
                 fromBot();
             }
         } while (status != EXIT);
+        save();
     }
 
     public static void main(String[] args) {

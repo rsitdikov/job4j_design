@@ -1,12 +1,17 @@
 package io;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
 
 public class EchoServer {
-    public static void main(String[] args) throws IOException {
+    private static final Logger LOG = LoggerFactory.getLogger(UsageLog4j.class.getName());
+
+    public static void main(String[] args) {
         final Map<String, String> answers = Map.of(
                 "Exit", "Goodbye, dear friend.",
                 "Hello", "Hello, dear friend."
@@ -28,8 +33,12 @@ public class EchoServer {
                             }
                         }
                     }
+                } catch (Exception e) {
+                    LOG.error("Request execution error", e);
                 }
             }
+        } catch (Exception e) {
+            LOG.error("Server error", e);
         }
     }
 }

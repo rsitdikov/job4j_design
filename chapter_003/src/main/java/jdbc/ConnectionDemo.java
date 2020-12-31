@@ -17,6 +17,7 @@ public class ConnectionDemo {
         try (BufferedReader read = new BufferedReader(new FileReader(file))) {
             read.lines()
                     .map(line -> line.split("="))
+                    .filter(data -> data.length > 1)
                     .forEach(data -> properties.put(data[0], data[1]));
         } catch (Exception e) {
             e.printStackTrace();

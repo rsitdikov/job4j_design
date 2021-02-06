@@ -33,7 +33,8 @@ public class ImportDB {
                 cfg.getProperty("jdbc.url"),
                 cfg.getProperty("jdbc.username"),
                 cfg.getProperty("jdbc.password")
-        )) {Statement st = cnt.createStatement();
+        )) {
+            Statement st = cnt.createStatement();
             st.executeUpdate("CREATE TABLE IF NOT EXISTS users (id serial primary key, name varchar(255), email varchar(255))");
             st.close();
             String sql = "INSERT INTO users (name, email) VALUES ((?), (?))";

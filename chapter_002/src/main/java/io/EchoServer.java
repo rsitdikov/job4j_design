@@ -22,10 +22,13 @@ public class EchoServer {
                 try (OutputStream out = socket.getOutputStream();
                      BufferedReader in = new BufferedReader(
                              new InputStreamReader(socket.getInputStream()))) {
-                    String str, key;
-                    while (!(str = in.readLine()).isEmpty()) {
+                    while (true) {
+                        String str = in.readLine();
+                        if (str.isEmpty()) {
+                            break;
+                        }
                         if (str.contains("msg")) {
-                            key = str.split("msg=")[1].split(" ")[0];
+                            String key = str.split("msg=")[1].split(" ")[0];
                             out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
                             out.write(answers.getOrDefault(key, key).getBytes());
                             if (key.equals("Exit")) {

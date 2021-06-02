@@ -1,0 +1,69 @@
+Эксперименты с различными GC[1590#268982]
+
+1. Используя разные ключи запуска виртуальной машины установить различные виды сборщика мусора
+
+Для программы GCDemo из первого урока данного модуля были установлены различные сборщики мусора с импользованием ключей:
+-XX:+UseSerialGC - для Serial GC;
+-XX:+UseParallelGC - для Parrallel GC;
+-XX:+UseG1GC - для G1;
+-XX:+UseZGC - для ZGC.
+
+Заданы параметры запуска -Xmx4m -Xms4m -XX:+UseSerialGC -Xloggc:serialGC.log
+
+[0.003s][info][gc] Using Serial
+[0,153s][info][gc] GC(0) Pause Young (Allocation Failure) 1M->0M(3M) 2,818ms
+[0,235s][info][gc] GC(1) Pause Full (System.gc()) 1M->1M(3M) 4,611ms
+
+Заданы параметры запуска -Xmx4m -Xms4m -XX:+UseParallelGC -Xloggc:parallelGC.log
+
+[0.003s][info][gc] Using Parallel
+[0,063s][info][gc] GC(0) Pause Young (Allocation Failure) 0M->0M(3M) 1,681ms
+[0,124s][info][gc] GC(1) Pause Young (Allocation Failure) 0M->0M(3M) 1,943ms
+[0,165s][info][gc] GC(2) Pause Young (Allocation Failure) 1M->1M(3M) 1,352ms
+[0,190s][info][gc] GC(3) Pause Young (System.gc()) 1M->1M(3M) 1,319ms
+[0,197s][info][gc] GC(4) Pause Full (System.gc()) 1M->1M(3M) 7,389ms
+
+Заданы параметры запуска -Xmx4m -Xms4m -XX:+UseG1GC -Xloggc:g1cGC.log
+
+[0.004s][info][gc] Using G1
+[0,165s][info][gc] GC(0) Pause Young (Normal) (G1 Evacuation Pause) 1M->1M(4M) 4,769ms
+[0,184s][info][gc] GC(1) Pause Full (System.gc()) 1M->1M(4M) 5,264ms
+
+Заданы параметры запуска -Xmx4m -Xms4m -XX:+UseZGC -Xloggc:zGC.log
+
+[0.032s][info][gc] Using The Z Garbage Collector
+[0,175s][info][gc] GC(0) Garbage Collection (Warmup) 2M(50%)->4M(100%)
+[0,270s][info][gc] GC(1) Garbage Collection (Warmup) 4M(100%)->4M(100%)
+[0,270s][info][gc] Allocation Stall (main) 8,479ms
+[0,302s][info][gc] GC(2) Garbage Collection (System.gc()) 4M(100%)->4M(100%)
+[0,302s][info][gc] Allocation Stall (Finalizer) 3,491ms
+
+2. Оценить поведения срабатывания различных типов сборщиков мусора для программы из первого урока данной модуля.
+
+- Thoughput (Пропускная способность):
+   SerialGC:    (1 -  7.429 / 235) * 100% = 96.84%
+   ParallelGC:  (1 - 13.684 / 197) * 100% = 93.05%
+   G1GC:        (1 - 10.033 / 184) * 100% = 94.55%
+   ZGC:         (1 - 11.970 / 302) * 100% = 96.04%
+
+- GC Overhead:
+   SerialGC:    ( 7.429 / 235) * 100% = 3.16%
+   ParallelGC:  (13.684 / 197) * 100% = 6.95%
+   G1GC:        (10.033 / 184) * 100% = 5.55%
+   ZGC:         (11.970 / 302) * 100% = 3.86%
+
+- Freequency of collection:
+   SerialGC:    2
+   ParallelGC:  5
+   G1GC:        2
+   ZGC:         3
+
+3. Как вы считаете какой из сборщиков мусора подойдет наиболее оптимально для приложения заявок из второго модуля?
+
+В связи с небольшим объемом данных в приложении для заявок (менее 100 МБ), нетребовательностью к производительности и
+паузам для сборки мусора, может быть использован SerialGC.
+
+4. Какой тип сборщика будет оптимален для серверного приложения?
+
+Для серверного приложения, оперирующего большими объемами данных, оптимален сборщик Garbage-First (G1). При размере
+кучи в несколько террабайтов и допустимом времени паузы менее 10ms, необходимо использовать ZGC.

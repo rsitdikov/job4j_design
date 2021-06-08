@@ -39,6 +39,7 @@ public class ArgZip {
     public String output() {
         return takeValue("-o=");
     }
+
     private String takeValue(String key) {
         return Arrays.stream(args)
                 .filter(arg -> arg.contains(key) && !arg.endsWith(key))

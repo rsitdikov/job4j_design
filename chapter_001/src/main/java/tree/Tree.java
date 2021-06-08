@@ -35,6 +35,7 @@ class Tree<E> implements SimpleTree<E> {
         }
         return rsl;
     }
+
     public boolean isBinary() {
         boolean rsl = true;
         Queue<Node<E>> data = new LinkedList<>();

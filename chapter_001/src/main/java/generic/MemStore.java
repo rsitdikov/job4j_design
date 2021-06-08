@@ -41,6 +41,7 @@ public final class MemStore<T extends Base> implements Store<T> {
         }
         return rsl;
     }
+
     private int searchIndex(String id) {
         int rsl = -1;
         for (int index = 0; index < mem.size(); index++) {

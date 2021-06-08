@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.PrintWriter;
 
-
 public class Analizy {
     public void unavailable(String source, String target) {
         StringBuilder rsl = new StringBuilder();

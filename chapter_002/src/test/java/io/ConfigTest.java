@@ -18,6 +18,7 @@ public class ConfigTest {
                 is("Petr Arsentev")
         );
     }
+
     @Test
     public void whenPairsWithCommentsAndBlankLines() {
         String path = "./data/app.properties";

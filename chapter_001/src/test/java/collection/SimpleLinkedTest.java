@@ -53,6 +53,7 @@ public class SimpleLinkedTest {
         array.add("second");
         it.next();
     }
+
     @Test
     public void whenAddThenIter() {
         SimpleLinked<Integer> linked = new SimpleLinked<>();

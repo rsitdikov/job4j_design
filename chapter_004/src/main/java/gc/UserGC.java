@@ -1,6 +1,5 @@
 package gc;
 
-
 public class UserGC {
 
     private static final Runtime ENVIRONMENT = Runtime.getRuntime();

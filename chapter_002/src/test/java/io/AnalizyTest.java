@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
-
 public class AnalizyTest {
 
     @Rule

@@ -1,7 +1,6 @@
 package ru.job4j.io;
 
 import java.util.HashMap;
-import java.util.IllegalFormatException;
 import java.util.Map;
 
 public class ArgsName {
@@ -17,6 +16,9 @@ public class ArgsName {
             throw new IllegalArgumentException("No arguments specified.");
         }
         for (String arg : args) {
+            if (!arg.startsWith("-") || !arg.contains("=")) {
+                throw new IllegalArgumentException("Invalid argument format.");
+            }
             String[] array = arg.replaceFirst("-", "")
                     .split("=");
             if (array.length != 2) {

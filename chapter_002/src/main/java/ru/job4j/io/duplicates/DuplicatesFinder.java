@@ -20,6 +20,7 @@ public class DuplicatesFinder {
         }
         return rsl;
     }
+
     public static void main(String[] args) throws IOException {
         Path start = validate(args);
         System.out.println("Duplicate files:");

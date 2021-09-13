@@ -4,90 +4,85 @@ import ru.job4j.io.ArgsName;
 
 import java.io.*;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
+import java.util.StringJoiner;
 
 public class CSVReader {
-    private ArgsName arguments = new ArgsName();
-    private List<List<String>> data = new ArrayList<>();
+    private static ArgsName arguments = new ArgsName();
 
-    private void validate(String[] args) {
-        if (args.length != 4) {
-            throw new IllegalArgumentException("Wrong number of arguments."
-                                        + System.lineSeparator()
-                                        + "Usage java -jar csvReader.jar -path=SOURCE_FILE -delimiter=DELIMITER "
-                                        + "-out=TARGET_FILE -filter=COLUMNS.");
+    private static void validate(ArgsName arguments) {
+        String[] parameters = {"Path", "Delimiter", "Out", "Filter"};
+        for (String parameter : parameters) {
+            if (arguments.get(parameter.toLowerCase()) == null) {
+                throw new IllegalArgumentException(String.format(
+                        "%s parameter not found.", parameter));
+            }
         }
-        arguments = ArgsName.of(args);
+        CSVReader.arguments = arguments;
         if (!Paths.get(arguments.get("path")).toFile().isFile()) {
-            throw new IllegalArgumentException(String.format("File '%s' is missing.", arguments.get("path")));
+            throw new IllegalArgumentException(String.format("File '%s' is missing.",
+                    arguments.get("path")));
         }
         if (!arguments.get("delimiter").equals(";") && !arguments.get("delimiter").equals(",")) {
             throw new IllegalArgumentException("Wrong delimiter. Usage ',' or ';'.");
         }
-        if (!arguments.get("out").equals("stdout") && new File(arguments.get("out")).isFile()) {
-            throw new IllegalArgumentException(String.format("The output file '%s'exists. "
-                    + "Give a different filename"));
-        }
-        if (arguments.get("filter").split(",").length < 1) {
-            throw new IllegalArgumentException("No filter set for output.");
-        }
     }
 
-    private void read() throws FileNotFoundException {
-        List<String> headlines;
-        Scanner first = new Scanner(Paths.get(arguments.get("path")).toFile());
-        if (first.hasNext()) {
-            headlines = List.of(first.nextLine()
-                    .split(arguments.get("delimiter")));
-            data.add(headlines);
-            Scanner second = first.useDelimiter(arguments.get("delimiter") + "|\r\n");
-            while (second.hasNext()) {
-                List<String> line = new ArrayList<>();
-                for (int index = 0; index < headlines.size(); index++) {
-                    if (second.hasNext()) {
-                        line.add(second.next());
+    private static boolean check(String value, String[] filters) {
+        boolean rsl = false;
+        for (String filter : filters) {
+            if (filter.equals(value)) {
+                rsl = true;
+                break;
+            }
+        }
+        return rsl;
+    }
+
+    private static void processData() throws FileNotFoundException {
+        String[] filters = arguments.get("filter").split(",");
+        try (Scanner scaner = new Scanner(Paths.get(arguments.get("path")).toFile());
+             PrintWriter writer = new PrintWriter(arguments.get("out").equals("stdout")
+                     ? System.out
+                     : new FileOutputStream(arguments.get("out")))) {
+            if (scaner.hasNext()) {
+                String[] columns = scaner.nextLine()
+                        .split(arguments.get("delimiter"));
+                StringJoiner row = new StringJoiner(arguments.get("delimiter"));
+                for (String column : columns) {
+                    if (check(column, filters)) {
+                        row.add(column);
                     }
                 }
-                data.add(line);
+                if (row.toString().equals("")) {
+                    throw new IllegalArgumentException("Wrong filter values.");
+                }
+                writer.println(row.toString());
+                scaner.useDelimiter(arguments.get("delimiter")
+                        + "|"
+                        + System.lineSeparator());
+                while (scaner.hasNext()) {
+                    row = new StringJoiner(arguments.get("delimiter"));
+                    for (String column : columns) {
+                        if (scaner.hasNext()) {
+                            String data = scaner.next();
+                            if (check(column, filters)) {
+                                row.add(data);
+                            }
+                        }
+                    }
+                    writer.println(row.toString());
+                }
             }
         }
     }
 
-    private void write() throws IOException {
-        StringBuilder builder = new StringBuilder();
-        List<String> headlines = data.get(0);
-        List<String> filters = List.of(arguments.get("filter").split(","));
-        for (List<String> line : data) {
-            for (String headline : headlines) {
-                for (String filter : filters) {
-                    if (headline.equals(filter)) {
-                        int index = headlines.indexOf(headline);
-                        builder.append(line.get(index));
-                        builder.append(arguments.get("delimiter"));
-                    }
-                }
-            }
-            int index = builder.lastIndexOf(arguments.get("delimiter"));
-            builder.replace(index, index + 1, System.lineSeparator());
-        }
-        try (OutputStream os = arguments.get("out").equals("stdout")
-                ? System.out
-                : new FileOutputStream(arguments.get("out"));
-             PrintWriter writer = new PrintWriter(os);
-        ) {
-            writer.println(builder.toString());
-        }
-    }
-
-    public void execute(String[] args) throws IOException {
-        validate(args);
-        read();
-        write();
+    public static void handle(ArgsName arguments) throws IOException {
+        validate(arguments);
+        processData();
     }
 
     public static void main(String[] args) throws IOException {
-        new CSVReader().execute(args);
+         CSVReader.handle(ArgsName.of(args));
     }
 }

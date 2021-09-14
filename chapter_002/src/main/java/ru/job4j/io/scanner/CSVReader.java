@@ -39,39 +39,38 @@ public class CSVReader {
         return rsl;
     }
 
+    private static String parse(String line, String[] columns, String[] filters) {
+        String delimiter = arguments.get("delimiter");
+        StringJoiner rsl = new StringJoiner(delimiter);
+        try (Scanner sc = new Scanner(new ByteArrayInputStream(line
+                .getBytes())).useDelimiter(delimiter)) {
+            int index = 0;
+            while (sc.hasNext()) {
+               String value = sc.next();
+               if (check(columns[index++], filters)) {
+                   rsl.add(value);
+               }
+            }
+        }
+        return rsl.toString();
+    }
+
     private static void processData() throws FileNotFoundException {
         String[] filters = arguments.get("filter").split(",");
-        try (Scanner scaner = new Scanner(Paths.get(arguments.get("path")).toFile());
+        try (Scanner scanner = new Scanner(Paths.get(arguments.get("path")).toFile());
              PrintWriter writer = new PrintWriter(arguments.get("out").equals("stdout")
                      ? System.out
                      : new FileOutputStream(arguments.get("out")))) {
-            if (scaner.hasNext()) {
-                String[] columns = scaner.nextLine()
-                        .split(arguments.get("delimiter"));
-                StringJoiner row = new StringJoiner(arguments.get("delimiter"));
-                for (String column : columns) {
-                    if (check(column, filters)) {
-                        row.add(column);
-                    }
-                }
-                if (row.toString().equals("")) {
+            if (scanner.hasNext()) {
+                String line = scanner.nextLine();
+                String[] columns = line.split(arguments.get("delimiter"));
+                String headline = parse(line, columns, filters);
+                if (headline.equals("")) {
                     throw new IllegalArgumentException("Wrong filter values.");
                 }
-                writer.println(row.toString());
-                scaner.useDelimiter(arguments.get("delimiter")
-                        + "|"
-                        + System.lineSeparator());
-                while (scaner.hasNext()) {
-                    row = new StringJoiner(arguments.get("delimiter"));
-                    for (String column : columns) {
-                        if (scaner.hasNext()) {
-                            String data = scaner.next();
-                            if (check(column, filters)) {
-                                row.add(data);
-                            }
-                        }
-                    }
-                    writer.println(row.toString());
+                writer.println(headline);
+                while (scanner.hasNext()) {
+                    writer.println(parse(scanner.nextLine(), columns, filters));
                 }
             }
         }

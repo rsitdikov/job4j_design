@@ -1,0 +1,13 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<сity name="Пермь" founded="1723" isResortTown="false">
+    <coordinates lat="58.0105" lon="56.2502"/>
+    <districts>
+        <district>Ленинский</district>
+        <district>Кировский</district>
+        <district>Орджоникидзевский</district>
+        <district>Дзержинский</district>
+        <district>Свердловский</district>
+        <district>Индустриальный</district>
+        <district>Мотовилихинский</district>
+    </districts>
+</сity>

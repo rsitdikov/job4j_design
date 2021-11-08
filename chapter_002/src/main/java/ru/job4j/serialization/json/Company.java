@@ -1,9 +1,10 @@
 package ru.job4j.serialization.json;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Company {
     private String name;
@@ -20,6 +21,26 @@ public class Company {
         this.departments = departments;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public boolean isState() {
+        return isState;
+    }
+
+    public int getFounded() {
+        return founded;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public String[] getDepartments() {
+        return departments;
+    }
+
     @Override
     public String toString() {
         return "Company{"
@@ -31,16 +52,24 @@ public class Company {
                 + '}';
     }
 
-     public static void main(String[] args) {
+    public static void main(String[] args) {
+
+        JSONObject jsonAddress = new JSONObject("{\"zip\":\"614064\""
+                + ",\"city\":\"Пермь\",\"street\":\"Льва Шатрова\",\"building\":\"13а\"}");
+        List<String> list = List.of("Администрация", "Бухгалтерия", "Плановый", "Производственный",
+                "Транспортный");
+        JSONArray jsonDepartments = new JSONArray(list);
         final Company company = new Company(
-                "ООО Недра", false, 1995, new Address("614064",
-                "Пермь", "Льва Шатрова", "13а"),
-                new String[] {"Администрация", "Бухгалтерия", "Плановый", "Производственный",
-                        "Транспортный"});
-        System.out.println(String.format("Объект до сериализации: %s", company));
-        final Gson gson = new GsonBuilder().create();
-        final String companyJson = gson.toJson(company);
-        final Company companyFromJson = gson.fromJson(companyJson, Company.class);
-        System.out.println(String.format("Объект после сериализации: %s", companyFromJson));
-     }
+                "ООО Недра", false, 1995, new Address("620000",
+                "Екатеринбург", "Малышева", "5"),
+                new String[] {"Администрация", "Бухгалтерия", "Плановый"});
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", company.getName());
+        jsonObject.put("isState", company.isState());
+        jsonObject.put("founded", company.getFounded());
+        jsonObject.put("address", jsonAddress);
+        jsonObject.put("departments", jsonDepartments);
+        System.out.println(jsonObject);
+        System.out.println(new JSONObject(company));
+    }
 }

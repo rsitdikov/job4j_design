@@ -13,6 +13,22 @@ public class Address {
         this.building = building;
     }
 
+    public String getZip() {
+        return zip;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public String getBuilding() {
+        return building;
+    }
+
     @Override
     public String toString() {
         return "Address{"

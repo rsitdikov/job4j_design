@@ -61,7 +61,7 @@ public class Emulator {
                             File.separator, directory, s)).exists()
                             && s.endsWith(".txt");
             String file = dataInput(question, message, predicate);
-            cache.load(file);
+            cache.put(file, cache.load(file));
             System.out.println(String.format("File '%s' loaded.", file));
         } else {
             System.out.println("First select the directory");

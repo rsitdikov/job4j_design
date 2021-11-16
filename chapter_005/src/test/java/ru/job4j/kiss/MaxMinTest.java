@@ -1,5 +1,6 @@
 package ru.job4j.kiss;
 
+import org.checkerframework.checker.units.qual.C;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,48 +18,37 @@ public class MaxMinTest {
         maxMin = new MaxMin();
     }
 
-    @Test (expected = NullPointerException.class)
+    @Test (expected = IndexOutOfBoundsException.class)
     public void whenListIsEmpty() {
         maxMin.min(new ArrayList<>(),
                         Byte::compareTo);
     }
 
     @Test (expected = NullPointerException.class)
-    public void whenAllCellsContainNull() {
-        List<Integer> list = new ArrayList<>();
-        list.add(null);
-        list.add(null);
-        maxMin.max(list, Integer::compareTo);
-    }
-
-    @Test
-    public void whenNullAtBeginning() {
+    public void whenCellsContainNullAndComparatorNotNullSafe() {
         List<String> list = new ArrayList<>();
         list.add(null);
-        list.add("Second");
-        list.add("Third");
-        assertEquals("Second",
-                maxMin.min(list, String::compareTo));
-    }
-
-    @Test
-    public void whenNullInMiddle() {
-        List<String> list = new ArrayList<>();
         list.add("First");
         list.add(null);
+        list.add("Second");
+        list.add(null);
         list.add("Third");
+        list.add(null);
+        maxMin.min(list, String::compareTo);
+    }
+
+    @Test
+    public void whenCellsContainNullAndComparatorNullSafe() {
+        List<String> list = new ArrayList<>();
+        list.add(null);
+        list.add("First");
+        list.add(null);
+        list.add("Second");
+        list.add(null);
+        list.add("Third");
+        list.add(null);
         assertEquals("Third",
-                maxMin.max(list, String::compareTo));
-    }
-
-    @Test
-    public void whenNullAtEnd() {
-        List<String> list = new ArrayList<>();
-        list.add("First");
-        list.add("Second");
-        list.add(null);
-        assertEquals("First",
-                maxMin.min(list, String::compareTo));
+                maxMin.max(list, Comparator.nullsFirst(String::compareTo)));
     }
 
     @Test

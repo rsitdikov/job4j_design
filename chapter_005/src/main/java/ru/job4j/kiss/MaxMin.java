@@ -14,18 +14,13 @@ public class MaxMin {
     }
 
     private <T> T calculate(List<T> value, Comparator<T> comparator, Predicate<Integer> condition)
-            throws NullPointerException {
-        T rsl = null;
-        for (T other : value) {
-            if (other != null) {
-                if (rsl == null
-                        || (condition.test(comparator.compare(rsl, other)))) {
-                    rsl = other;
-                }
+            throws IndexOutOfBoundsException, NullPointerException {
+        T rsl = value.get(0);
+        for (int index = 1; index < value.size(); index++) {
+            T other = value.get(index);
+            if (condition.test(comparator.compare(rsl, other))) {
+                rsl = other;
             }
-        }
-        if (rsl == null) {
-            throw new NullPointerException("No data to compare.");
         }
         return rsl;
     }

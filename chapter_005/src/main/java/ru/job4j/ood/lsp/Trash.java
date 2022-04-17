@@ -7,17 +7,14 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Trash implements Store {
-    List<Food> foods = new ArrayList<>();
+    private List<Food> foods = new ArrayList<>();
 
     @Override
     public boolean add(Food food) {
         boolean rsl = false;
-        LocalDate current = LocalDate.now();
-        LocalDate expire = food.getExpiryDate();
-        if (current.isAfter(expire)) {
-                foods.add(food);
-                rsl = true;
-            }
+        if (accept(food)) {
+            rsl = foods.add(food);
+        }
         return rsl;
     }
 
@@ -26,6 +23,11 @@ public class Trash implements Store {
         return foods.stream()
                 .filter(predicate)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean accept(Food food) {
+        return LocalDate.now().isAfter(food.getExpiryDate());
     }
 
 }

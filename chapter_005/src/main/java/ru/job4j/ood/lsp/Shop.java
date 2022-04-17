@@ -1,32 +1,31 @@
 package ru.job4j.ood.lsp;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Shop implements Store {
-    List<Food> foods = new ArrayList<>();
+    private List<Food> foods = new ArrayList<>();
 
     @Override
     public boolean add(Food food) {
         boolean rsl = false;
-        LocalDate current = LocalDate.now();
-        LocalDate create = food.getCreateDate();
-        LocalDate expire = food.getExpiryDate();
-        double percent = 100.0 * ChronoUnit.DAYS.between(create, current)
-                / ChronoUnit.DAYS.between(create, expire);
-        if (percent >= 25.0 && percent <= 100.0) {
-            if (percent > 75.0) {
-                food.setDiscount((int) food.getPrice() / 2);
+        if (accept(food)) {
+            if (getPercentLifeExpired(food) > 75.0) {
+                food.setPrice(
+                        food.getPrice() * (100.0 - food.getDiscount()) / 100.0
+                );
             }
-            foods.add(food);
-            rsl = true;
+            rsl = foods.add(food);
         }
         return rsl;
+    }
+
+    @Override
+    public boolean accept(Food food) {
+        double percent = getPercentLifeExpired(food);
+        return percent >= 25.0 && percent <= 100.0;
     }
 
     @Override

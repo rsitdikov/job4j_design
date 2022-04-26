@@ -1,7 +1,6 @@
 package ru.job4j.ood.lsp.parking;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -14,7 +13,6 @@ public class SimpleParkingTest {
         parking = new SimpleParking(2, 1);
     }
 
-    @Ignore
     @Test
     public void when2CarsAnd1TruckAreAdded() {
         assertTrue(parking.add(new Car()));
@@ -22,14 +20,12 @@ public class SimpleParkingTest {
         assertTrue(parking.add(new Car()));
     }
 
-    @Ignore
     @Test
     public void when2TrucksOfSize2AreAdded() {
         parking.add(new Truck(2));
         assertTrue(parking.add(new Truck(2)));
     }
 
-    @Ignore
     @Test
     public void when3CarsAreAdded() {
         parking.add(new Car());
@@ -37,7 +33,6 @@ public class SimpleParkingTest {
         assertFalse(parking.add(new Car()));
     }
 
-    @Ignore
     @Test
     public void when1CarsAnd2TrucksAreAdded() {
         parking.add(new Car());
@@ -45,14 +40,12 @@ public class SimpleParkingTest {
         assertFalse(parking.add(new Truck(2)));
     }
 
-    @Ignore
     @Test
     public void when2TrucksOfSize3AreAdded() {
         parking.add(new Truck(3));
         assertFalse(parking.add(new Truck(3)));
     }
 
-    @Ignore
     @Test
     public void whenCarIsDroppedFromTruckSpace() {
         Vehicle truck = new Truck(3);
@@ -61,7 +54,6 @@ public class SimpleParkingTest {
         assertTrue(parking.drop(truck));
     }
 
-    @Ignore
     @Test
     public void whenCarIsDroppedFromCarSpace() {
         Vehicle truck = new Truck(2);
@@ -70,7 +62,6 @@ public class SimpleParkingTest {
         assertTrue(parking.drop(truck));
     }
 
-    @Ignore
     @Test
     public void whenThereIsNoSuchVehicle() {
         Vehicle truck = new Truck(2);
@@ -78,9 +69,27 @@ public class SimpleParkingTest {
         assertFalse(parking.drop(truck));
     }
 
-    @Ignore
     @Test
     public void whenThereAreNoVehicles() {
         assertFalse(parking.drop(new Car()));
+    }
+
+    @Test
+    public void whenThereAreGapsBetweenCarsThenTruckDoesNotFit() {
+        parking = new SimpleParking(3, 1);
+        Vehicle first = new Car();
+        Vehicle third = new Car();
+        parking.add(first);
+        parking.add(new Car());
+        parking.add(third);
+        parking.add(new Truck(5));
+        parking.drop(first);
+        parking.drop(third);
+        assertFalse(parking.add(new Truck(2)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenTruckSizeIsLessThan2() {
+        Vehicle first = new Truck(1);
     }
 }

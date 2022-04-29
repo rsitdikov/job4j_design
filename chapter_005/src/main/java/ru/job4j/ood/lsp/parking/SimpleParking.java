@@ -18,16 +18,12 @@ public class SimpleParking implements Parking {
     @Override
     public boolean add(Vehicle vehicle) {
         boolean rsl = false;
-        if (isTruckPark(vehicle)) {
-            rsl = execute(trucksSpace, null, vehicle, 1);
-            if (rsl) {
-                trucksPlaces--;
-            }
-        } else if (isCarPark(vehicle)) {
-            rsl = execute(carsSpace, null, vehicle, vehicle.getSize());
-            if (rsl) {
-                carsPlaces -= vehicle.getSize();
-            }
+        if (isTruckPark(vehicle) && execute(trucksSpace, null, vehicle, 1)) {
+            rsl = true;
+            trucksPlaces--;
+        } else if (isCarPark(vehicle) && execute(carsSpace, null, vehicle, vehicle.getSize())) {
+            rsl = true;
+            carsPlaces -= vehicle.getSize();
         }
         return rsl;
     }
@@ -35,17 +31,13 @@ public class SimpleParking implements Parking {
     @Override
     public boolean drop(Vehicle vehicle) {
         boolean rsl = false;
-        if (isCarDepark(vehicle)) {
-            rsl = execute(carsSpace, vehicle, null, vehicle.getSize());
-            if (rsl) {
-                carsPlaces += vehicle.getSize();
+        if (isCarDepark(vehicle) && execute(carsSpace, vehicle, null, vehicle.getSize())) {
+            rsl = true;
+            carsPlaces += vehicle.getSize();
+        } else if (isTruckDepark(vehicle) && execute(trucksSpace, vehicle, null, 1)) {
+            rsl = true;
+            trucksPlaces++;
             }
-        } else if (isTruckDepark(vehicle)) {
-            rsl = execute(trucksSpace, vehicle, null, 1);
-            if (rsl) {
-                trucksPlaces++;
-            }
-        }
         return rsl;
     }
 

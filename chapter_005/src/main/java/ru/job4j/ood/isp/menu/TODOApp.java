@@ -5,11 +5,12 @@ import java.util.Scanner;
 
 public class TODOApp {
     public static final ActionDelegate STUB_ACTION = System.out::println;
-
-    private final int addTask = 0;
-    private final int selectTask = 1;
-    private final int printTasks = 2;
-    private final int exit = 3;
+    private static final int ADD_TASK = 0;
+    private static final int SELECT_TASK = 1;
+    private static final int PRINT_TASKS = 2;
+    private static final int EXIT = 3;
+    private static final String ROOT = "ROOT";
+    private final MenuPrinter printer = new SimpleMenuPrinter();
 
     public void execute(Scanner scanner) {
         Menu menu = new SimpleMenu();
@@ -18,11 +19,11 @@ public class TODOApp {
             showMenu();
             System.out.print("Select: ");
             int select = Integer.parseInt(scanner.nextLine());
-            if (select == addTask) {
+            if (select == ADD_TASK) {
                 System.out.println("Add a new task:");
                 System.out.println("Enter parent task name or ROOT: ");
                 String parent = scanner.nextLine();
-                if ("ROOT".equals(parent)) {
+                if (ROOT.equals(parent)) {
                     parent = Menu.ROOT;
                 }
                 System.out.println("Enter a name for the new task: ");
@@ -32,7 +33,7 @@ public class TODOApp {
                 } else {
                     System.out.println("Task could not be added.");
                 }
-            } else if (select == selectTask) {
+            } else if (select == SELECT_TASK) {
                 System.out.println("Task selection:");
                 System.out.println("Enter the name of the task: ");
                 String task = scanner.nextLine();
@@ -45,11 +46,10 @@ public class TODOApp {
                 } else {
                     System.out.println("Task not found.");
                 }
-            } else if (select == printTasks) {
+            } else if (select == PRINT_TASKS) {
                 System.out.println("All Tasks:");
-                SimpleMenuPrinter printer = new SimpleMenuPrinter();
                 printer.print(menu);
-            } else if (select == exit) {
+            } else if (select == EXIT) {
                 run = false;
             }
         }

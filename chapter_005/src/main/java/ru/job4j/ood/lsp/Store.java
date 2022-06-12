@@ -21,4 +21,6 @@ public interface Store {
                 / ChronoUnit.DAYS.between(create, expire);
     }
 
+    List<Food> clear();
+
 }

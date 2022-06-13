@@ -16,9 +16,9 @@ public class ControllQualityTest {
         List<Food> foods = List.of(
                 new Milk("Milk", current.plusDays(76), current.minusDays(24), 25, 0)
         );
-        Store warehouse = new Warehouse(new ArrayList<>());
-        Store shop = new Shop(new ArrayList<>());
-        Store trash = new Trash(new ArrayList<>());
+        Store warehouse = new Warehouse();
+        Store shop = new Shop();
+        Store trash = new Trash();
         List<Store> stores = List.of(warehouse, shop, trash);
         ControllQuality controllQuality = new ControllQuality();
         controllQuality.distribute(foods, stores);
@@ -33,9 +33,9 @@ public class ControllQualityTest {
         List<Food> foods = List.of(
                 new Bread("Bread", current.plusDays(75), current.minusDays(25), 50, 0)
         );
-        Store warehouse = new Warehouse(new ArrayList<>());
-        Store shop = new Shop(new ArrayList<>());
-        Store trash = new Trash(new ArrayList<>());
+        Store warehouse = new Warehouse();
+        Store shop = new Shop();
+        Store trash = new Trash();
         List<Store> stores = List.of(warehouse, shop, trash);
         ControllQuality controllQuality = new ControllQuality();
         controllQuality.distribute(foods, stores);
@@ -51,9 +51,9 @@ public class ControllQualityTest {
         List<Food> foods = List.of(
                 new Sausage("Sausage", current, current.minusDays(100), 100, 0)
         );
-        Store warehouse = new Warehouse(new ArrayList<>());
-        Store shop = new Shop(new ArrayList<>());
-        Store trash = new Trash(new ArrayList<>());
+        Store warehouse = new Warehouse();
+        Store shop = new Shop();
+        Store trash = new Trash();
         List<Store> stores = List.of(warehouse, shop, trash);
         ControllQuality controllQuality = new ControllQuality();
         controllQuality.distribute(foods, stores);
@@ -68,9 +68,9 @@ public class ControllQualityTest {
         List<Food> foods = List.of(
                 new Milk("Milk", current.minusDays(4), current.minusDays(16), 25, 0)
         );
-        Store warehouse = new Warehouse(new ArrayList<>());
-        Store shop = new Shop(new ArrayList<>());
-        Store trash = new Trash(new ArrayList<>());
+        Store warehouse = new Warehouse();
+        Store shop = new Shop();
+        Store trash = new Trash();
         List<Store> stores = List.of(warehouse, shop, trash);
         ControllQuality controllQuality = new ControllQuality();
         controllQuality.distribute(foods, stores);
@@ -85,9 +85,9 @@ public class ControllQualityTest {
         List<Food> foods = List.of(
                 new Sausage("Sausage", current, current.minusDays(100), 200, 30)
         );
-        Store warehouse = new Warehouse(new ArrayList<>());
-        Store shop = new Shop(new ArrayList<>());
-        Store trash = new Trash(new ArrayList<>());
+        Store warehouse = new Warehouse();
+        Store shop = new Shop();
+        Store trash = new Trash();
         List<Store> stores = List.of(warehouse, shop, trash);
         ControllQuality controllQuality = new ControllQuality();
         controllQuality.distribute(foods, stores);
@@ -102,9 +102,9 @@ public class ControllQualityTest {
         Food sausage = new Sausage("Sausage", current.plusDays(29), current.minusDays(1), 200, 40);
         Food spoiledMilk = new Milk("Milk2", current.minusDays(2), current.minusDays(9), 70, 35);
         List<Food> foods = List.of(milk, bread, sausage, spoiledMilk);
-        Store warehouse = new Warehouse(new ArrayList<>());
-        Store shop = new Shop(new ArrayList<>());
-        Store trash = new Trash(new ArrayList<>());
+        Store warehouse = new Warehouse();
+        Store shop = new Shop();
+        Store trash = new Trash();
         List<Store> stores = List.of(warehouse, shop, trash);
         ControllQuality controllQuality = new ControllQuality();
         controllQuality.distribute(foods, stores);
@@ -121,9 +121,9 @@ public class ControllQualityTest {
         Food sausage = new Sausage("Sausage", current.plusDays(29), current.minusDays(1), 200, 40);
         Food spoiledMilk = new Milk("Milk2", current.minusDays(2), current.minusDays(9), 70, 35);
         List<Food> foods = List.of(milk, bread, sausage, spoiledMilk);
-        Store warehouse = new Warehouse(new ArrayList<>());
-        Store shop = new Shop(new ArrayList<>());
-        Store trash = new Trash(new ArrayList<>());
+        Store warehouse = new Warehouse();
+        Store shop = new Shop();
+        Store trash = new Trash();
         List<Store> stores = List.of(warehouse, shop, trash);
         ControllQuality controllQuality = new ControllQuality();
         controllQuality.distribute(foods, stores);
@@ -143,9 +143,9 @@ public class ControllQualityTest {
         Food sausage = new Sausage("Sausage", current.plusDays(29), current.minusDays(1), 200, 40);
         Food spoiledMilk = new Milk("Milk2", current.minusDays(2), current.minusDays(9), 70, 35);
         List<Food> foods = List.of(milk, bread, sausage, spoiledMilk);
-        Store warehouse = new Warehouse(new ArrayList<>());
-        Store shop = new Shop(new ArrayList<>());
-        Store trash = new Trash(new ArrayList<>());
+        Store warehouse = new Warehouse();
+        Store shop = new Shop();
+        Store trash = new Trash();
         List<Store> stores = List.of(warehouse, shop, trash);
         ControllQuality controllQuality = new ControllQuality();
         controllQuality.distribute(foods, stores);

@@ -6,11 +6,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Shop implements Store {
-    private List<Food> foods;
-
-    public Shop(List<Food> foods) {
-        this.foods = foods;
-    }
+    private List<Food> foods = new ArrayList<>();
 
     @Override
     public boolean add(Food food) {

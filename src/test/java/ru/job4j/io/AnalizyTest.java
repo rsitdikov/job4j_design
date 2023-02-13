@@ -1,27 +1,22 @@
 package ru.job4j.io;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import java.io.*;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.Assert.assertNull;
 
-public class AnalizyTest {
 
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+class AnalizyTest {
 
     @Test
-    public void whenTempFolderIsUsed() throws IOException {
-        File source = folder.newFile("server.log");
-        File target = folder.newFile("unavailable.csv");
-        List<String> expected = List.of("10:57:01;10:59:01", "11:01:02;11:02:02");
-        List<String> result = new ArrayList<>();
+    void whenTempFolderIsUsed(@TempDir Path tempDir) throws IOException {
+        File source = tempDir.resolve("server.log").toFile();
         try (PrintWriter out = new PrintWriter(source)) {
             String log = String.join(System.lineSeparator(),
                     "200 10:56:01",
@@ -36,14 +31,17 @@ public class AnalizyTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        File target  = tempDir.resolve("target.txt").toFile();
         Analizy analizy = new Analizy();
         analizy.unavailable(source.getAbsolutePath(), target.getAbsolutePath());
+        List<String> result = new ArrayList<>();
         try (BufferedReader in = new BufferedReader(new FileReader(target))) {
             result = in.lines().collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        assertEquals(result, expected);
+        List<String> expected = List.of("10:57:01;10:59:01", "11:01:02;11:02:02");
+        assertThat(expected).isEqualTo(result);
     }
 
     @Test
@@ -52,8 +50,8 @@ public class AnalizyTest {
         Analizy analizy = new Analizy();
         analizy.unavailable(source, target);
         BufferedReader in = new BufferedReader(new FileReader(target));
-        assertEquals(in.readLine(), ("10:57:01;10:59:01"));
-        assertEquals(in.readLine(), ("11:01:02;11:02:02"));
+        assertThat("10:57:01;10:59:01").isEqualTo(in.readLine());
+        assertThat("11:01:02;11:02:02").isEqualTo(in.readLine());
         assertNull(in.readLine());
         in.close();
     }

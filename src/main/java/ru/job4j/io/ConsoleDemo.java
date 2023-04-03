@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 public class ConsoleDemo {
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         String login;
         char[] charPassword;
         Console console = System.console();
